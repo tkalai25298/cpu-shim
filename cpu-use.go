@@ -151,9 +151,10 @@ func (c *SimpleChaincode) AddUsage(stub shim.ChaincodeStubInterface, args []stri
 	}
 
 
-	consumption := []Consumption{}
-
-	consumed,err := json.Marshal([]string{args[3],args[4],args[5]})
+	consumption := Consumption{}
+	// consumeddata := []string{args[3]}
+	
+	consumed,err := json.Marshal(args[3])
 	if err != nil {
 		fmt.Println("consumption array marshal err")
 		return shim.Error(err.Error())
@@ -163,7 +164,7 @@ func (c *SimpleChaincode) AddUsage(stub shim.ChaincodeStubInterface, args []stri
 	
 		err = json.Unmarshal(consumed,&consumption)
 		if err != nil {
-			fmt.Println("consumption array unmarshal err")
+			fmt.Println("consumption array unmarshal err",err)
 			return shim.Error(err.Error())
 		}
 
@@ -192,7 +193,7 @@ func (c *SimpleChaincode) AddUsage(stub shim.ChaincodeStubInterface, args []stri
 	}
 	usageVal.DeviceTimestamp = dts
 
-	usageVal.Consumption = append(usageVal.Consumption, consumption[0],consumption[1],consumption[2])
+	usageVal.Consumption = append(usageVal.Consumption, consumption)
 	
 	usageByte, err := json.Marshal(usageVal)
 	if err != nil{
