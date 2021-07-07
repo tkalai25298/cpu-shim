@@ -141,8 +141,6 @@ func (c *SimpleChaincode) AddUsage(stub shim.ChaincodeStubInterface, args []stri
 		shim.Error("Incorrect number or arguments")
 	}
 
-	fmt.Printf("args:%+v",args)
-
 	name := args[0]
 	key, err:= stub.CreateCompositeKey(name_space,[]string{name})
 
@@ -150,18 +148,7 @@ func (c *SimpleChaincode) AddUsage(stub shim.ChaincodeStubInterface, args []stri
 		return shim.Error(err.Error())
 	}
 
-
-	consumption := []Consumption{}
-	// consumeddata := []string{args[3]}
-	
-	// consumed,err := json.Marshal(args[3])
-	// if err != nil {
-	// 	fmt.Println("consumption array marshal err")
-	// 	return shim.Error(err.Error())
-	// }
-
-	// fmt.Printf("consumed json:%+v",string(consumed))
-	
+	consumption := []Consumption{}	
 	
 	consumedData := []string{args[3],args[4],args[5]}
 
@@ -169,13 +156,10 @@ func (c *SimpleChaincode) AddUsage(stub shim.ChaincodeStubInterface, args []stri
 		cons := Consumption{}
 		err = json.Unmarshal([]byte(c),&cons)
 		if err != nil {
-			fmt.Println("consumption array unmarshal err",err)
 			return shim.Error(err.Error())
 		}
 		consumption = append(consumption,cons)
 	}
-
-	fmt.Printf("consumption:%+v",consumption)
 
 	usageGet, err := stub.GetState(key)
 
