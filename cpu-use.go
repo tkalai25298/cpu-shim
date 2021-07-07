@@ -150,7 +150,7 @@ func (c *SimpleChaincode) AddUsage(stub shim.ChaincodeStubInterface, args []stri
 		return shim.Error(err.Error())
 	}
 
-	consumption := []*Consumption{}
+	consumption := []Consumption{}
 
 	consumed,err := json.Marshal([]string{args[3],args[4],args[5]})
 	if err != nil {
@@ -237,7 +237,7 @@ func (c *SimpleChaincode) GetHistory(stub shim.ChaincodeStubInterface, args []st
 			return shim.Error(err.Error())
 		}
 
-		if arrayWritten == true {
+		if arrayWritten {
 			buffer.WriteString(",")
 		}
 		buffer.WriteString("{\"Value\":")
