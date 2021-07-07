@@ -165,12 +165,14 @@ func (c *SimpleChaincode) AddUsage(stub shim.ChaincodeStubInterface, args []stri
 	
 	consumedData := []string{args[3],args[4],args[5]}
 
-	for i,c := range consumedData {
-		err = json.Unmarshal([]byte(c),&consumption[i])
+	for _,c := range consumedData {
+		cons := Consumption{}
+		err = json.Unmarshal([]byte(c),&cons)
 		if err != nil {
 			fmt.Println("consumption array unmarshal err",err)
 			return shim.Error(err.Error())
 		}
+		consumption = append(consumption,cons)
 	}
 
 	fmt.Printf("consumption:%+v",consumption)
