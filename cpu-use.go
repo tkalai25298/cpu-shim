@@ -162,7 +162,7 @@ func (c *SimpleChaincode) AddUsage(stub shim.ChaincodeStubInterface, args []stri
 
 	fmt.Printf("consumed json:%+v",string(consumed))
 	
-		err = json.Unmarshal(consumed,&consumption)
+		err = json.Unmarshal([]byte(args[3]),&consumption)
 		if err != nil {
 			fmt.Println("consumption array unmarshal err",err)
 			return shim.Error(err.Error())
