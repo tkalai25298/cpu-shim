@@ -154,11 +154,13 @@ func (c *SimpleChaincode) AddUsage(stub shim.ChaincodeStubInterface, args []stri
 	consumption := Consumption{}
 	// consumeddata := []string{args[3]}
 	
-	consumed,err := json.Marshal(args[3])
-	if err != nil {
-		fmt.Println("consumption array marshal err")
-		return shim.Error(err.Error())
-	}
+	// consumed,err := json.Marshal(args[3])
+	// if err != nil {
+	// 	fmt.Println("consumption array marshal err")
+	// 	return shim.Error(err.Error())
+	// }
+
+	
 
 	fmt.Printf("consumed json:%+v",string(consumed))
 	
@@ -187,7 +189,7 @@ func (c *SimpleChaincode) AddUsage(stub shim.ChaincodeStubInterface, args []stri
 	usageVal.Time = time.Now()
 	usageVal.MAC = args[1]
 
-	dts,err := time.Parse("ANSIC",args[2])
+	dts,err := time.Parse("0001-01-01T00:00:00Z",args[2])
 	if err != nil {
 		return shim.Error(err.Error())
 	}
