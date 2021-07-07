@@ -17,8 +17,8 @@ var name_space string = "org.cpu-use.Usage"
 
 type Usage struct{
     Time time.Time 	 `json:"time"`
-    MAC string		 `json:"mac"`
-    DeviceTimestamp time.Time	 `json:"dts"`
+    MAC string		 `json:"macID"`
+    DeviceTimestamp time.Time	 `json:"deviceTimestamp"`
     Consumption []Consumption	 `json:"consumption"`
 }
 
@@ -50,7 +50,7 @@ func (c *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	switch fun{
 	case "init":
 		return c.init(stub,args)
-	case "AddCpu":
+	case "AddCPU":
 		return c.AddCpu(stub,args)
 	case "AddUsage":
 		return c.AddUsage(stub,args)
@@ -141,6 +141,8 @@ func (c *SimpleChaincode) AddUsage(stub shim.ChaincodeStubInterface, args []stri
 		shim.Error("Incorrect number or arguments")
 	}
 
+	fmt.Printf("args:%+v",args)
+
 	name := args[0]
 	key, err:= stub.CreateCompositeKey(name_space,[]string{name})
 
@@ -148,19 +150,22 @@ func (c *SimpleChaincode) AddUsage(stub shim.ChaincodeStubInterface, args []stri
 		return shim.Error(err.Error())
 	}
 
-	consumption := []Consumption{}
+	consumption := []*Consumption{}
 
 	consumed,err := json.Marshal([]string{args[3],args[4],args[5]})
 	if err != nil {
 		fmt.Println("consumption array marshal err")
 		return shim.Error(err.Error())
 	}
+
+	fmt.Printf("consumed json:%+v",string(consumed))
 	
-	
-	err = json.Unmarshal(consumed,&consumption)
-	if err != nil {
-		fmt.Println("consumption array unmarshal err")
-		return shim.Error(err.Error())
+	for _,c := range consumed {
+		err = json.Unmarshal(consumed,&consumption)
+		if err != nil {
+			fmt.Println("consumption array unmarshal err")
+			return shim.Error(err.Error())
+		}
 	}
 
 	usageGet, err := stub.GetState(key)
