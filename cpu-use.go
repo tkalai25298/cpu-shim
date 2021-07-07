@@ -150,6 +150,7 @@ func (c *SimpleChaincode) AddUsage(stub shim.ChaincodeStubInterface, args []stri
 		return shim.Error(err.Error())
 	}
 
+
 	consumption := []Consumption{}
 
 	consumed,err := json.Marshal([]string{args[3],args[4],args[5]})
