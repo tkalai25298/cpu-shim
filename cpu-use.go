@@ -18,7 +18,7 @@ var name_space string = "org.cpu-use.Usage"
 type Usage struct{
     Time time.Time 	 `json:"time"`
     MAC string		 `json:"macID"`
-    DeviceTimestamp time.Time	 `json:"deviceTimestamp"`
+    DeviceTimestamp string	 `json:"deviceTimestamp"`
     Consumption []Consumption	 `json:"consumption"`
 }
 
@@ -91,9 +91,9 @@ func (c *SimpleChaincode) AddCpu(stub shim.ChaincodeStubInterface, args []string
 	}
 
 	usageVal := &Usage{
-		Time:       time.Time{},
+		Time:            time.Time{},
 		MAC:             "",
-		DeviceTimestamp: time.Time{},
+		DeviceTimestamp: "",
 		Consumption:     []Consumption{},
 	}
 
@@ -180,11 +180,7 @@ func (c *SimpleChaincode) AddUsage(stub shim.ChaincodeStubInterface, args []stri
 	usageVal.Time = time.Now()
 	usageVal.MAC = args[1]
 
-	dts,err := time.Parse("0001-01-01T00:00:00Z",args[2])
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-	usageVal.DeviceTimestamp = dts
+	usageVal.DeviceTimestamp = args[2]
 
 	usageVal.Consumption = append(usageVal.Consumption, consumption...)
 	
