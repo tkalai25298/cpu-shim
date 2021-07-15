@@ -190,7 +190,7 @@ func (c *SimpleChaincode) AddUsage(stub shim.ChaincodeStubInterface, args []stri
 
 	usageVal.DeviceTimestamp = args[2]
 
-	usageVal.Consumption = append(usageVal.Consumption, consumption...)
+	usageVal.Consumption = consumption
 	
 	usageByte, err := json.Marshal(usageVal)
 	if err != nil{
