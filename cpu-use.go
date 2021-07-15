@@ -17,6 +17,7 @@ var name_space string = "org.cpu-use.Usage"
 
 type Usage struct{
     Time time.Time 	 `json:"time"`
+	MeterMPAN string `json:"meter_mpan"`
     MAC string		 `json:"macID"`
     DeviceTimestamp string	 `json:"deviceTimestamp"`
     Consumption []Consumption	 `json:"consumption"`
@@ -71,12 +72,14 @@ func (c *SimpleChaincode) init(stub shim.ChaincodeStubInterface, args []string) 
 
 //AddCpu register a cpu
 func (c *SimpleChaincode) AddCpu(stub shim.ChaincodeStubInterface, args []string) pb.Response{
-	if len(args) != 1 {
+	if len(args) != 2 {
 		shim.Error("Incorrect number or arguments")
 	}
 
 	name := args[0]
-	key, err:= stub.CreateCompositeKey(name_space,[]string{name})
+	mpan := args[1]
+
+	key, err:= stub.CreateCompositeKey(name_space,[]string{name,mpan})
 
 	if err != nil {
 		return shim.Error(err.Error())
@@ -92,6 +95,7 @@ func (c *SimpleChaincode) AddCpu(stub shim.ChaincodeStubInterface, args []string
 
 	usageVal := &Usage{
 		Time:            time.Time{},
+		MeterMPAN:       mpan,
 		MAC:             "",
 		DeviceTimestamp: "",
 		Consumption:     []Consumption{},
@@ -113,12 +117,14 @@ func (c *SimpleChaincode) AddCpu(stub shim.ChaincodeStubInterface, args []string
 
 // GetUsage returns stored value
 func (c *SimpleChaincode) GetUsage(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-	if len(args) != 1 {
+	if len(args) != 2 {
 		shim.Error("Incorrect number or arguments")
 	}
 
 	name := args[0]
-	key, err:= stub.CreateCompositeKey(name_space,[]string{name})
+	mpan := args[1]
+
+	key, err:= stub.CreateCompositeKey(name_space,[]string{name,mpan})
 
 	if err != nil {
 		return shim.Error(err.Error())
@@ -137,12 +143,14 @@ func (c *SimpleChaincode) GetUsage(stub shim.ChaincodeStubInterface, args []stri
 
 // AddUsage to update the cpu asset
 func (c *SimpleChaincode) AddUsage(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-	if len(args) != 6 {
+	if len(args) != 7 {
 		shim.Error("Incorrect number or arguments")
 	}
 
 	name := args[0]
-	key, err:= stub.CreateCompositeKey(name_space,[]string{name})
+	mpan := args[1]
+
+	key, err:= stub.CreateCompositeKey(name_space,[]string{name,mpan})
 
 	if err != nil {
 		return shim.Error(err.Error())
@@ -200,12 +208,14 @@ func (c *SimpleChaincode) AddUsage(stub shim.ChaincodeStubInterface, args []stri
 
 // GetHistory returns entire history of the asset
 func (c *SimpleChaincode) GetHistory(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-	if len(args) != 1 {
+	if len(args) != 2 {
 		shim.Error("Incorrect number or arguments")
 	}
 
 	name := args[0]
-	key, err:= stub.CreateCompositeKey(name_space,[]string{name})
+	mpan := args[1]
+
+	key, err:= stub.CreateCompositeKey(name_space,[]string{name,mpan})
 
 	if err != nil {
 		return shim.Error(err.Error())
