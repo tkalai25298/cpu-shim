@@ -13,7 +13,7 @@ import (
 type SimpleChaincode struct{
 }
 
-var name_space string = "org.cpu-use.Usage"
+const name_space string = "ngp.Consumption"
 
 type Usage struct{
     Time time.Time 	 `json:"time"`
@@ -95,7 +95,6 @@ func (c *SimpleChaincode) AddCpu(stub shim.ChaincodeStubInterface, args []string
 
 	usageVal := &Usage{
 		Time:            time.Time{},
-		MeterMPAN:       mpan,
 		MAC:             "",
 		DeviceTimestamp: "",
 		Consumption:     []Consumption{},
@@ -157,12 +156,10 @@ func (c *SimpleChaincode) AddUsage(stub shim.ChaincodeStubInterface, args []stri
 	}
 
 	consumption := []Consumption{}	
-	
-	consumedData := []string{args[3],args[4],args[5]}
 
-	for _,c := range consumedData {
+	for _,consumedData := range args[4:7] {
 		cons := Consumption{}
-		err = json.Unmarshal([]byte(c),&cons)
+		err = json.Unmarshal([]byte(consumedData),&cons)
 		if err != nil {
 			return shim.Error(err.Error())
 		}
@@ -186,9 +183,9 @@ func (c *SimpleChaincode) AddUsage(stub shim.ChaincodeStubInterface, args []stri
 	}
 
 	usageVal.Time = time.Now()
-	usageVal.MAC = args[1]
+	usageVal.MAC = args[2]
 
-	usageVal.DeviceTimestamp = args[2]
+	usageVal.DeviceTimestamp = args[3]
 
 	usageVal.Consumption = consumption
 	
