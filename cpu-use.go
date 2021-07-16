@@ -17,7 +17,7 @@ const name_space string = "ngp.Consumption"
 
 type Usage struct{
     Time time.Time 	 `json:"time"`
-	MeterMPAN string `json:"meter_mpan"`
+	MeterMPAN string `json:"meter_mpan,omitempty"`
     MAC string		 `json:"macID"`
     DeviceTimestamp string	 `json:"deviceTimestamp"`
     Consumption []Consumption	 `json:"consumption"`
