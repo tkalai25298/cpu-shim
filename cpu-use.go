@@ -25,7 +25,7 @@ type Usage struct{
 
 type Consumption struct{
     PhaseID uint8	`json:"phaseID"`
-    KWh float32		`json:"kwh"`
+    KWh float64		`json:"kwh"`
 }
 
 func main() {
