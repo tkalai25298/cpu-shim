@@ -1,9 +1,10 @@
 package main
 
 import (
-	"encoding/json"
 	"bytes"
+	"encoding/json"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/hyperledger/fabric-chaincode-go/shim"
@@ -30,7 +31,28 @@ type Consumption struct{
 
 func main() {
 
-	err := shim.Start(new(SimpleChaincode))
+	ccid := os.Getenv("CHAINCODE_ID")
+	if ccid == "" {
+		fmt.Println("No Chaincode ID")
+	} else {
+		fmt.Println("ID : "+ccid)
+	}
+	add := os.Getenv("CHAINCODE_SERVER_ADDRESS")
+	if add == "" {
+		fmt.Println("No Address assigned")
+	} else {
+		fmt.Println("ADD : "+add)
+	}
+	chaincode := new(SimpleChaincode)
+	server := &shim.ChaincodeServer{
+		CCID: ccid,
+		Address: add,
+		CC: chaincode,
+		TLSProps: shim.TLSProperties{
+			Disabled: true,
+		},
+	}
+	err := server.Start()
 	if err != nil {
 		fmt.Println("Error starting chaincode server")
 	}
